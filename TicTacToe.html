@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <!-- The title of the web page is Tic Tac Toe. -->
+    <title>Tic Tac Toe</title>
+
+    <style>
+      /* The following styles apply to the table element. */
+      table {
+        border-collapse: collapse;
+      }
+
+      /* The following styles apply to the td element. */
+      td {
+        width: 50px;
+        height: 50px;
+        border: 1px solid black;
+        text-align: center;
+        font-size: 40px;
+        cursor: pointer;
+      }
+
+      /* The following styles apply to elements with class "x". */
+      .x {
+        color: blue;
+      }
+
+      /* The following styles apply to elements with class "o". */
+      .o {
+        color: red;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- This is the game board. It consists of a table with three rows and three columns. -->
+    <table>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+
+    <script>
+      /* Select the table element and all of its td children. */
+      var table = document.querySelector("table");
+      var cells = table.querySelectorAll("td");
+
+      /* The current player is "x" at the beginning of the game. */
+      var currentPlayer = "x";
+
+      /* Add a click event listener to each td element. */
+      cells.forEach(function(cell) {
+        cell.addEventListener("click", function() {
+          /* Only add the current player's mark if the cell is empty. */
+          if (!cell.classList.contains("x") && !cell.classList.contains("o")) {
+            cell.classList.add(currentPlayer);
+            cell.textContent = currentPlayer.toUpperCase();
+
+            /* If the current player has won, reset the board. */
+            if (checkWin()) {
+              alert(currentPlayer.toUpperCase() + " wins!");
+              resetBoard();
+            }
+
+            /* If the game is a draw, reset the board. */
+            else if (checkDraw()) {
+              alert("Draw!");
+              resetBoard();
+            }
+
+            /* Switch to the other player's turn. */
+            else {
+              currentPlayer = currentPlayer === "x" ? "o" : "x";
+            }
+          }
+        });
+      });
+
+      /* Check if the current player has won the game. */
+      function checkWin() {
+        var lines = [
+          [0, 1, 2],
+          [3, 4, 5],
+          [6, 7, 8],
+          [0, 3, 6],
+          [1, 4, 7],
+          [2, 5, 8],
+          [0, 4, 8],
+          [2, 4, 6]
+        ];
+
+        for (var i = 0; i < lines.length; i++) {
+          var a = lines[i][0];
+          var b = lines[i][1];
+          var c = lines[i][2];
+          if (
+            cells[a].classList.contains(currentPlayer) &&
+            cells[b].classList.contains(currentPlayer) &&
+            cells[c].classList.contains(currentPlayer)
+          ) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      /* Check if the game is a draw. */
+      function checkDraw() {
+        for (var i = 0; i < cells.length; i++) {
+          if (!cells[i].classList.contains("x") && !cells[i].classList.contains("o")) {
+            return false;
+          }
+        }
+        return true;
+      }
+
+      function resetBoard() {
+        cells.forEach(function(cell) {
+          cell.classList.remove("x");
+          cell.classList.remove("o");
+          cell.textContent = "";
+        });
+        currentPlayer = "x";
+      }
+    </script>
+  </body>
+</html>
